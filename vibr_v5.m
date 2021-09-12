@@ -1,88 +1,126 @@
 function PT
 global a m k0 k eta dt Vt
-m=0.1;
-k0=1.e3;
-k=k0/3.;
-V_=1.; % ------- amplitude
+m=0.1; % weight
+k0=1000; % модуль Юнга  (что-то типа упругости)
+k=k0/3.; % модуль Юнга  (что-то типа упругости) но тут для другой пружины (333.3333)
+V_=1.; % Начальная скорость стенда
 
-k_=k*k0/(k+k0); % for the case of eta=0
-om_=sqrt(k_/m); 
-nu_=om_/2./pi % ------- resonant friquency in Hz
-T_=1./nu_
+nT=2000; % количество отрезков, на которое мы разбиваем время
+nOm=100; % - количество рассматриваемых частот
 
-n=2;
-om=zeros(n,1);
-del=zeros(n,1);
-om0=2*pi*10;
-om1=2.*pi*100.;
-dom=(om1-om0)/(n-1);
-for j=0:n-1
-  om(j+1)=om0+dom*j;
+% Для абсолютно упругой системы можно проверить по более простым формулам (крайний случай)
+% k_=k*k0/(k+k0); % for the case of eta=0
+% om_=sqrt(k_/m);
+% nu_=om_/2./pi % ------- resonant friquency in Hz
+% T_=1./nu_
+
+
+om=zeros(nOm,1); % - омега - угловая частота
+del=zeros(3, nOm); % - дельта - относительная погрешность (три массива для положения, скорости, силы)
+om0=20; % - частота от (2*pi*10)
+om1=200; % - частота до (2.*pi*100.)
+dom=(om1-om0)/(nOm-1); % - шаг частот
+for j=0:nOm-1
+  om(j+1)=om0+dom*j; % - массив частот для проверки
 end
 
-eta=1.e3; % ------- !!!!!!!
-T=.5;
-nT=2000; % steps
-dt=T/nT;
-t=(1:nT)*dt;
-a=4.*m/dt/dt/k0+(k+k0)/eta/k0*2.*m/dt;
+eta=1000; % вязкость демфера (то насколько гасятся колебания)
+T=.5; % сколько всего времени мы смотрим
+dt=T/nT; % шаг времени
 
-amplituda_ = zeros(n,1);
-amplituda = zeros(n,1);
+t=(1:nT)*dt; % массив рассматриваемых точек времени
 
-z=zeros(nT,1);
-v=zeros(nT,1);
-F=zeros(nT,1);
+a=4.*m/dt/dt/k0+(k+k0)/eta/k0*2.*m/dt; % константа часто повторяющаяся в вычислениях
 
-zt=zeros(nT,1);
-vt=zeros(nT,1);
-Ft=zeros(nT,1);
+amplituda = zeros(nOm,1);
+amplituda_ = zeros(nOm,1);
 
-for jj=1:n
+% цикл по частотам
+for jj=1:nOm
+  % массивы численных результатов
+  z=zeros(nT,1); % положение
+  v=zeros(nT,1); % скорость
+  F=zeros(nT,1); % сила
+
+  % массивы точных результатов
+  zt=zeros(nT,1); % положение
+  vt=zeros(nT,1); % скорость
+  Ft=zeros(nT,1); % сила
+
+  % точное решение для нулевого времени
   [z_ v_ F_]=sol(om(jj),V_);
+
+  % для точного решения задаем крайние условия
+  zt(1)=z_;
+  vt(1)=v_;
+  Ft(1)=F_;
+
+  % для численного решения задаем крайние условия
   z(1)=z_;
   v(1)=v_;
   F(1)=F_;
 
-  zt(1)=z_;
-  vt(1)=v_;
-  real(v_)
-  Ft(1)=F_;
   for j=1:nT-1
-    Vt=V_*exp(i*om(jj)*(t(j)-dt/2.));
-    [z(j+1) v(j+1) F(j+1)]=step(z(j),v(j),F(j));
-    % ------- precise solution
-    zt(j+1)=z_*exp(i*om(jj)*t(j));
-    vt(j+1)=v_*exp(i*om(jj)*t(j));
+    % Точное решение для нужного времени получаем по простым формулам
     Ft(j+1)=F_*exp(i*om(jj)*t(j));
+    vt(j+1)=v_*exp(i*om(jj)*t(j));
+    zt(j+1)=z_*exp(i*om(jj)*t(j));
+
+    Vt=V_*exp(i*om(jj)*t(j)); % текущая скорость стенда
+
+    % численное решение
+    [z(j+1) v(j+1) F(j+1)]=step(z(j),v(j),F(j));
   end
 
-  figure % ------- test
-  [po]=plot(t,real(vt));
-  set(po,'linewidth',2);
-  colormap hsv;
-  grid on;
-  hold on;
+  % figure % ------- test
+  % [po]=plot(t,real(vt));
+  % set(po,'linewidth',2);
+  % colormap hsv;
+  % grid on;
+  % hold on;
 
-  figure
-  [pf]=plot(t,real(v),'b-');
-  set(pf,'linewidth',2);
-  colormap hsv;
-  grid on;
-  hold on;
+  % figure
+  % [pf]=plot(t,real(v),'b-');
+  % set(pf,'linewidth',2);
+  % colormap hsv;
+  % grid on;
+  % hold on;
 
-  del(jj)=norm(z(j)-zt(j),v(j)-vt(j),F(j)-Ft(j)); % ????????
-  d1=norm(zt(j),v(j),F(j));
-  del(jj)=del(jj)/d1;
+  del(1, jj)=norm(z - zt) / norm(zt); % относительная погрешность положения
+  del(2, jj)=norm(v - vt) / norm(vt); % относительная погрешность скорости
+  del(3, jj)=norm(F - Ft) / norm(Ft); % относительная погрешность силы
 
-  rz = zeros(nT, 1);
-  for j=1, nT
-    rz(j)=real(z_(j));
-  end
-
-  amplituda_(jj) = abs(max(rz) - min(rz));
-  amplituda(jj) = abs(max(zt) - min(zt));
+  % считаем амплитуду
+  % amplituda(jj) = abs(max(zt) - min(zt));
+  % amplituda_(jj) = abs(max(z) - min(z));
 end
+
+disp('Max delta z:')
+disp(max(del(1)))
+figure('Name','delta z');
+plotDelta=plot(om, del(1, :));
+set(plotDelta,'linewidth',2);
+colormap hsv;
+grid on;
+hold on;
+
+disp('Max delta v:')
+disp(max(del(2)))
+figure('Name','delta v');
+[plotDelta]=plot(om, del(2, :));
+set(plotDelta,'linewidth',2);
+colormap hsv;
+grid on;
+hold on;
+
+disp('Max delta F:')
+disp(max(del(3)))
+figure('Name','delta F');
+[plotDelta]=plot(om, del(3, :));
+set(plotDelta,'linewidth',2);
+colormap hsv;
+grid on;
+hold on;
 
 % figure
 % [pom_]=plot(om,amplituda_);
@@ -137,7 +175,8 @@ function [z_ v_ F_]=sol(om,V_);
 % a11*z_+a12*F_-b1
 % a21*z_+a22*F_-b2
 %------------------
-function d=norm(z,v,F);
-  global a m k0 k eta dt Vt
-  d=m*v*v+F*F/k0+k*(z-F/k0)*(z-F/k0);
-  d=sqrt(d/2.);
+
+% function d=customNorm(z,v,F);
+%   global a m k0 k eta dt Vt
+%   d=m*v*v+F*F/k0+k*(z-F/k0)*(z-F/k0);
+%   d=sqrt(d/2.);
