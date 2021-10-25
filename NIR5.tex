@@ -1,0 +1,369 @@
+\documentclass[a4paper,14pt,russian]{extreport}
+ 
+\usepackage{extsizes}%это для задания шрифта 14pt, такого нет обычно
+\usepackage{cmap} % для кодировки шрифтов в pdf
+\usepackage[T2A]{fontenc}%поддержка кириллицы
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{textcase}
+%\usepackage{pscyr}
+ \usepackage{graphicx} % для вставки картинок
+\usepackage{amssymb,amsfonts,amsmath,amsthm} % математические дополнения от АМС
+\usepackage{indentfirst} % отделять первую строку раздела абзацным отступом тоже
+\usepackage[usenames,dvipsnames]{color} % названия цветов
+%\usepackage{makecell} пакет для таблиц
+\usepackage[left=3.0cm, right=1.0cm, top=2.0cm, bottom=2.0cm]{geometry}%вручную поля
+\linespread{1.3} % полуторный интервал
+%\renewcommand{\rmdefault}{ftm} % Times New Roman
+\frenchspacing%тире в русских текстах другое
+\usepackage{upgreek}%греческие буквы в русском немного по-другому пишутся, это для этих букв ддля госта 
+\usepackage{amsmath}%др матем символы
+\usepackage{listings}
+
+%\usepackage{titlesec}%Заголовки
+%\usepackage{fancyhdr}%колонтитулы, номера страниц можно размещать где угодно
+\usepackage{float}%это важно для всяких плавающих объектов типа рисунков, чтобы они были там где нужно а не уезжали на последнюю страницу
+\usepackage{pscyr}%русский язык для Times New Roman
+  \renewcommand{\rmdefault}{ftm}
+
+\usepackage{tocloft}
+\usepackage{blindtext}
+\usepackage[square,numbers,sort&compress]{natbib}
+\setlength{\bibsep}{0em}
+\usepackage{etoolbox}%bibliography space 
+\usepackage{etoolbox}%bibliography space
+\setlength{\parindent}{1.25cm}
+%\pagestyle{fancy}
+%\fancyhf{}
+%\fancyhead[R]{\thepage}
+%\fancyheadoffset{0mm}
+%\fancyfootoffset{0mm}
+%\setlength{\headheight}{18pt}%это чтобы сверху и снизу одинаковое расстояние было
+
+%\renewcommand{\headrulewidth}{0pt}
+%\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\thesection}{\arabic{section}}
+\makeatletter
+\def\@biblabel#1{#1 }
+\makeatother
+
+\bibliographystyle{plain}
+
+%\renewcommand{\bibname}{Список использованных источников}
+%\addcontentsline{toc}{chapter}{Список использованных источников}
+
+\makeatletter
+% \fancypagestyle{plain}{ 
+    % \fancyhf{}
+    % \rhead{\thepage}}
+%\setcounter{page}{5}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+%%% оформление подписей к рисункам
+\RequirePackage{caption}
+\DeclareCaptionLabelSeparator{defffis}{ -- }
+\captionsetup{justification=centering,labelsep=defffis}
+\addto\captionsrussian{\def\figurename{Рисунок}}
+\numberwithin{figure}{section}
+
+\newtheorem{Definition}{\indent Определение}[section]
+\newtheorem{defin}{\indent Определение}[section]
+\newtheorem{theor}{\indent Tеорема}[section]
+\newtheorem{lemma}{\indent Лемма}[section]
+\newtheorem{example}{\indent Пример}[section]
+
+
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\addtocontents{toc}{\protect\pagestyle{empty}}
+
+
+
+%\titleformat
+%{\chapter} % command
+%[display] % shape
+%{\bfseries\normalsize} % format
+%{} % label
+%{} % sep
+%{\center\MakeUppercase} % before-code
+% % after-code
+
+
+%\titlespacing\chapter{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+
+\newenvironment{itemize*}%
+  {\begin{itemize}%
+    \setlength{\itemsep}{-14pt}%
+    \setlength{\parskip}{-7pt}}%
+  {\end{itemize}}
+
+
+
+
+%%%%%
+\begin{document}
+% -*- TeX:RU;US -*-
+\pagestyle{empty}
+
+
+\begin{center}
+
+Федеральное государственное автономное\\
+образовательное учреждение высшего образования\\
+«СИБИРСКИЙ ФЕДЕРАЛЬНЫЙ УНИВЕРСИТЕТ»\\
+
+\bigskip
+
+Институт математики и фундаментальной информатики\\
+\normalsize{Базовая кафедра вычислительных и информационных технологий}\\
+
+\vspace{2cm}
+\end{center}
+
+\hfill
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft}
+{  УТВЕРЖДАЮ}\\
+ Руководитель магистерской программы
+
+\vspace{0.2cm}
+
+\underline{\hbox to 1.5cm{\hfil}} \underline{\hbox to 4.2cm{\hfil}}
+\noindent
+\vspace{0.2cm}
+
+<<\underline{\hbox to 1cm{\hfil}}>>  \underline{\hbox to 3cm{\hfil}} 2021г.
+\end{flushleft}
+
+\end{minipage}
+
+\vspace{2cm}
+
+\begin{center}
+{\large\textbf{ОТЧЕТ О ПРАКТИЧЕСКОЙ РАБОТЕ}}
+\vspace{0.5cm}
+\\
+{\large  \textbf{Направление 02.04.01.01} Математическое и компьютерное моделирование}
+
+\vspace{1cm}
+
+{\large\bf МАТЕМАТИЧЕСКОЕ МОДЕЛИРОВАНИЕ ВИБРАЦИОННЫХ КОЛЕБАНИЙ УПРУГОГО СТЕРЖНЯ С ПРИСОЕДИНЕННЫМИ МАССАМИ}
+\end{center}
+
+ \vspace{1.5cm}
+
+\begin{flushleft}
+Руководитель\hfill 17.07.2021\;\;\;\underline{\hbox to 3cm{\hfil}} / В.М. Садовский\\
+\end{flushleft}
+\begin{flushleft}
+Студент ИМ20-05М 172047006\hfill 17.07.2021\;\;\;\underline{\hbox to 3cm{\hfil}} / Т.Д. Цыганок\\
+\end{flushleft}
+
+\vspace{\fill}
+
+\begin{center}
+Красноярск 2021
+\end{center}
+\pagestyle{empty}
+\newpage
+
+%\large 
+%\baselineskip=27pt
+
+\clearpage%
+\pagestyle{empty}
+\setlength{\cftbeforetoctitleskip}{-85pt}
+\setlength{\cftaftertoctitleskip}{-20pt}
+
+% \vspace*{0pt}
+\renewcommand{\contentsname}{\centering \section*{\normalsize СОДЕРЖАНИЕ}}
+
+\tableofcontents
+\newpage
+%
+\pagestyle{plain}
+\renewcommand{\@evenfoot}{\hfil\thepage\hfil}
+\renewcommand{\@oddfoot}{\hfil\thepage\hfil}
+\renewcommand{\@evenhead}{}
+\renewcommand{\@oddhead}{}
+\setcounter{page}{3}
+
+% \addcontentsline{toc}{section}{Введение}
+% \renewcommand{\refname}{\centering Введение}
+
+В данном случае задача сводится к системе уравнений вида
+\begin{equation} 
+ \begin{cases}
+   m_j \ddot{u_j}=-\alpha_j(u_j-u(x_j)), \\
+   m_j \ddot{w_j}=-\beta_j(w_j-w(x_j)),\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;j=1, \dots, k\\
+   J_j \ddot{\varphi_j}=-\upgamma_j(\varphi_j-w_x(x_j)),\\
+   \upvarrho \ddot{u}=Eu_{xx}+\sum_{j=1}^n \frac {\alpha_j} {S}(u_j-u(x_j))\delta(x-x_j),\\
+	\upvarrho \ddot{w}=-Dw_{xxxx}+\sum_{j=1}^k \frac {\beta_j} {S}(w_j-w(x_j))\delta(x-x_j)- \\
+	\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;-\sum_{j=1}^k \frac {\upgamma_j} {S}(\varphi_j-w_x(x_j))\delta^\prime(x-x_j).
+ \end{cases}
+\end{equation}
+\section{Разностная схема для уравнений присоединенных масс}
+% \begin{equation}
+%    m \frac {d^2x} {dt^2} = -kx \;\;\;| \frac {dx} {dt}
+% \end{equation}
+
+% \begin{equation}
+%   \frac {d} {dt} \frac{mv^2} {2} = - \frac {dk} {dt} \frac {x^2} {2}
+% \end{equation}
+Для уравнений движения присоединенных масс заменим пружину, которая соединяет массу с твердой стенкой реологиечкой схемой вязкоупругой среды Пойнтинга-Томсона (Рис. 2):
+
+\begin{figure}[H]
+    \center        
+\includegraphics[scale=0.6]{P_T1.pdf}
+\caption{\small Реологическая схема Пойнтинга-Томсона.}
+\end{figure}
+\begin{equation}
+\begin{cases}
+  \displaystyle \frac {dz} {dt} = v - V(t)\\
+  m \displaystyle \frac {dv} {dt}=-F\\
+  \displaystyle \frac {k+k_0} {k_0}F+ \frac {\eta} {k_0} \frac {dF} {dt} = kz+\eta \frac {dz} {dt},
+\end{cases}
+\end{equation}
+
+здесь $z$ - перемещение груза, $v$ - его скорость, $V$ - скорость в соответствующей точке стержня, $m$ - масса груза, $F$ - вектор внешних сил, $k_0$ и $k$ - модули Юнга упругих пружин, $\eta$ - коэффициент вязкости демпфера.
+
+\begin{equation}
+  \frac {m} {2} \frac {dv^2} {dt} = -Fv =-F (\frac {dz} {dt}+ V(t))
+\end{equation}
+\begin{equation}
+  \frac {dz} {dt} = \frac {1} {k_0} \frac {dF} {dt} + \frac {1} {\eta} (\frac {k+k_0} {k_0} F -kz)\;\;\;|F
+\end{equation}
+\begin{equation}
+  F \frac {dz} {dt} = \frac {1} {2k_0} \frac {dF^2} {dt} + \frac {1} {\eta} (\frac {k+k_0} {k_0} F -kz)(\frac {k+k_0} {k_0} F -kz+kz-\frac{k}{k_0}F)
+\end{equation}
+\begin{equation}
+  F \frac {dz} {dt} = \frac {1} {2k_0} \frac {dF^2} {dt} + \frac {1} {\eta} (\frac {k+k_0} {k_0} F -kz)^2+(\frac {dz} {dt} - \frac {1} {k_0} \frac {dF} {dt})(kz-\frac {k} {k_0}F)
+\end{equation}
+
+\begin{equation}
+  \frac {k} {2} \frac {d} {dt} (z-\frac {F}{k_0})^2=kz-\frac {k} {k_0} F
+\end{equation}
+
+\begin{equation}
+  \begin{cases}
+      \displaystyle F \frac {dz} {dt} = \frac {1} {2 k_0} \frac {dF^2} {dt} + \frac {1} {\eta} (\frac {k+k_0} {k_0} F - kz)^2 + \frac {k} {2} \frac {d} {dt} (z-\frac {F} {k_0} )^2, \\
+      -F\frac {dz} {dt} - FV = \frac {m} {2} {dv^2} {dt}
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+  -FV= \frac {m} {2} \frac {dv^2} {dt} + \frac {1} {2k_0} \frac {dF^2} {dt} + \frac {k} {2} \frac {d} {dt} (z-\frac {F} {k_0})^2 + \frac {1} {\eta} (\frac{k+k_0} {k_0}F-kz)^2,
+\end{equation}
+\begin{equation}
+  K=\frac {mv^2} {2}, W=\frac {F^2} {2k_0}+\frac {k} {2} (z-\frac{F} {k_0})^2, D=\frac {1} {\eta} (\frac {k+k_0}{k_0}F-kz)^2,
+\end{equation}
+
+здесь $K$ - кинетическая энергия, $W$ - потенциальная, $D$ - диссипация.
+
+\begin{equation}  
+  \frac {d} {dt}(K+W)+D=-F\cdot V(t),
+\end{equation}
+\begin{equation}
+  ||U||^2=\frac {mv^2}{2}+\frac {F^2} {2k_0}+\frac {k} {2} (z-\frac{F}{k_0})^2=\frac {1} {2}\; (z \; v \; F)\cdot \: A \: \cdot \begin{pmatrix}z \\v \\ F \end{pmatrix},
+\end{equation}
+
+\begin{equation}
+  A=\begin{pmatrix}
+  k& 0  & -\frac{k}{k_0}\\
+  0 & m  & 0\\
+  
+  
+  -\frac {k}{k_0} & 0  & \frac {1}{k_0}+\frac{k}{k_0^2}
+  \end{pmatrix}
+\end{equation}
+
+
+\begin{equation}
+  ||U||^2 = \frac {1} {2} U^{T} \cdot A \cdot U.
+\end{equation}
+
+Матрица $A$ является положительно определенной по критерию Сильвестра: 
+
+\begin{equation}
+   k>0,
+ \end{equation} 
+\begin{equation}
+\begin{vmatrix}
+  k& 0\\
+  0 & m
+\end{vmatrix}>0, 
+\end{equation}
+
+\begin{equation}
+  |A|=\frac {k m} {k_0}(1+ \frac {k} {k_0}) - \frac {k} {k_0}\cdot \frac {m k} {k_0} = \frac {km} {k_0} > 0.
+\end{equation}
+
+\begin{equation}
+  \delta = \frac {||U^n - U(n\tau)||} {||U(n\tau)||}  
+\end{equation}
+
+\begin{equation}
+\begin{cases}
+  \displaystyle \frac {\hat{z}-z} {\tau}=\frac{\hat{v}+v}{2} - V(t),\\
+  \displaystyle m\frac {\hat{v}-v} {\tau}=-\frac {\hat{F}+F} {2},\\
+  \displaystyle \frac {\hat{z}-z} {\tau}=\frac {1}{k_0}\frac {\hat{F}-F} {\tau}+\frac{1}{\eta}(\frac{k+k_0}{k_0} \frac{\hat{F}+F}{2}-k\frac{\hat{z}+z}{2})
+\end{cases}
+\end{equation}
+
+$V=\displaystyle \hat{V}e^{i\omega t}$ - вынужденные колебания, $\displaystyle \frac {dz} {dt}=v-V(t)$, $\displaystyle m\frac {d^2z} {dt^2} = -F$, $\displaystyle z=\hat{z}e^{i\omega t}$, $\displaystyle v=\hat{v} e^{i\omega t}$, $\displaystyle F=\hat{F}e^{i\omega t}$, отсюда получаем систему:
+
+\begin{equation}
+  \begin{cases}
+    \displaystyle i\omega \hat{z}=\hat{v} - \hat{V}(t) ,\\
+    \displaystyle i\omega m \hat{v}= -\hat{F} ,\\
+    \displaystyle \frac {k+k_0} {k_0} \hat{F} + \frac {i\omega \eta} {k_0} \hat{F} = k\hat{z} + i\omega \eta \hat{z} .
+  \end{cases} 
+\end{equation}
+
+Далее выразим из второго уравнения $v$, подставим в первое уравнение и домножим на $i \omega m$:
+
+\begin{equation}
+  \begin{cases}
+    \displaystyle -\omega^2 m \hat{z}=(-1+\frac {\hat{V}(t)} {\hat{v}})\hat{F},\\
+    \displaystyle (k+i\omega \eta) \hat{z}=(\frac {k+k_0}{k_0}+\frac {i\omega \eta} {k_0})\hat{F}
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+  \hat{v} + v = 2 \frac {\hat{z}-z} { \tau}+2 V(t),\;\;\;\; \frac {\hat{v}-v} {\tau} = \frac {1} {\tau} (2 \frac {\hat{z}-z} {\tau}-2v+2 V(t))
+\end{equation}
+
+\begin{equation}
+  \frac {\hat{F}+F}{2} = \frac {2m} {\tau} (v- \frac {\hat{z}-z} {\tau} - V(t))
+\end{equation}
+
+\begin{equation}
+  \frac {\hat{F}-F}{\tau} = \frac {1} {\tau} (2 \frac {\hat{F}+F} {2} - 2F) = \frac {4m} {\tau^2} (v- \frac {\hat{z}-z}{\tau}-V(t))-\frac {2F} {\tau} 
+\end{equation}
+
+\begin{equation}
+  \frac {\hat{z}-z} {\tau} = \frac {4m} {\tau^2k_0}(v-\frac {\hat{z}-z}{\tau} - V(t))-\frac {2F}{\tau k_0} + \frac {k+k_0} {\eta k_0} \cdot \frac {2m}{\tau}(v-\frac {\hat{z}-z} {\tau}-V(t))-\frac {k} {\eta} \frac{\hat{z}+z}{2}.
+\end{equation}
+
+\begin{equation}
+  \frac {\hat{z}-z} {\tau} = (\frac {4m}{\tau^2 k_0} + \frac {k+k_0} {\eta k_0} \frac {2m} {\tau})(v-\frac {\hat{z}-z}{\tau}-V(t))-\frac {k} {\eta} \frac {\hat{z}+z}{2} - \frac {2F} {\tau k_0}.
+\end{equation}
+
+Положим $\displaystyle \frac {4m} {\tau^2 k_0}+ \frac {k+k_0}{\eta k_0} \frac {2m}{\tau} = a$. Тогда
+
+\begin{equation}
+  \frac {\hat{z}-z}{\tau}(1+a)= -\frac {k} {\eta} \frac {\hat{z}+z}{2}+a(v-V(t)) - \frac {2F} {\tau k_0},
+\end{equation}
+\begin{equation}
+  \hat{z}(\frac {1+a}{\tau}+\frac {k}{2\eta})=z(\frac {1+a}{\tau}-\frac {k} {2\eta})+a(v-V(t))-\frac {2F}{\tau k_0}.
+\end{equation}
+
+
+
+\section{Заключение}
+В результате проделанной работы была построена математическая модель стержня с присоединенными массами; с использованием реологической схемы Поинтинга-Томсона получены разностные схемы уравнений, описывающих движения присоединенных масс. В дальнейшем планируется использовать эти схемы для программы,  описывающей колебания упругого стержня с присоединенными массами.
+
+
+
+
+ \end{document}
