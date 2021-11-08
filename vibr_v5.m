@@ -22,7 +22,7 @@ end
 
 eta=1.e3; % ------- !!!!!!!
 T=.5;
-nT=2000; % steps
+nT=200; % steps
 dt=T/nT;
 t=(1:nT)*dt;
 a=4.*m/dt/dt/k0+(k+k0)/eta/k0*2.*m/dt;
@@ -37,6 +37,8 @@ F=zeros(nT,1);
 zt=zeros(nT,1);
 vt=zeros(nT,1);
 Ft=zeros(nT,1);
+
+pogreshnost = zeros(n,nT-1);
 
 for jj=1:n
    [z_ v_ F_]=sol(om(jj),V_);
@@ -62,65 +64,42 @@ for jj=1:n
        delt = delt/dlt;
   
        del(jj) =del(jj)+(delt*delt);
+       
+       pogreshnost(jj,j) = delt;
   
      %  if  delt>del(jj)
      %      del(jj)= delt; 
      %  end
    end
  
-   del(jj)=sqrt(del(jj)/nT)
+   del(jj)=sqrt(del(jj)/nT);
    
-%    
-% figure % ------- test
-% [po]=plot(t,real(vt));
-% set(po,'linewidth',2);
-% colormap hsv;                
-% grid on;
-% hold on;
-% 
-%  figure
-%  [pf]=plot(t,real(v),'b-');
-%  set(pf,'linewidth',2);
-%  colormap hsv;
-%  grid on;
-%  hold on;
+   
+  %    
+  % figure % ------- test
+  % [po]=plot(t,real(vt));
+  % set(po,'linewidth',2);
+  % colormap hsv;                
+  % grid on;
+  % hold on;
+  % 
+  %  figure
+  %  [pf]=plot(t,real(v),'b-');
+  %  set(pf,'linewidth',2);
+  %  colormap hsv;
+  %  grid on;
+  %  hold on;
 
  
    
-   rz = zeros(nT, 1);
-   for j=1, nT
-        rz(j)=real(z(j));
-   end
+   % amplituda_(jj) = abs(max(rz) - min(rz)) ;
+   % amplituda(jj) = abs(max(zt) - min(zt)) ;
 
-   amplituda_(jj) = abs(max(rz) - min(rz)) ;
-   amplituda(jj) = abs(max(zt) - min(zt)) ;
-   
 end
 
-figure
-[pom_]=plot(om,amplituda_);
-set(pom_,'linewidth',2);
-colormap hsv;
-                 
-grid on;
-hold on;
+##pogreshnost
 
-figure
-[pom]=plot(om,amplituda);
-set(pom,'linewidth',2);
-colormap hsv;
-                 
-grid on;
-hold on;
- 
-figure
-[pom]=plot(om,del);
-set(pom,'linewidth',2);
-colormap hsv;
-                 
-grid on;
-hold on;
-
+surf((1:nT-1)*dt, om, abs(pogreshnost))
 
 % figure
 % [pf]=plot(t,real(z),'b-');
