@@ -1,6 +1,6 @@
 function vibr_v2
-clear all;close all;
-global dt
+   clear all;close all;
+   global dt
 mk=[1. 2.5 ]; % ------- adjacent masses [kg]
 Jk=[1. 1.5 ]*1.e-5; %inertia moments [kg*m^2]
 alk=[4. 2.5 ]*1.e6; % springs stiffness [N/m]
@@ -78,8 +78,8 @@ f_t=fopen('t.dat','w');
 f_u=fopen('u.dat','w');
 f_w=fopen('w.dat','w');
 for k=1:nm % open files for each point mass 
-    f_uk(k)=fopen(['uk',num2str(k),'.dat'],'w');
-    f_wk(k)=fopen(['wk',num2str(k),'.dat'],'w');
+  f_uk(k)=fopen(['uk',num2str(k),'.dat'],'w');
+  f_wk(k)=fopen(['wk',num2str(k),'.dat'],'w');
 end
 
 k_in=10; % ------- node for output into files
@@ -97,15 +97,15 @@ for it=1:N_time  % ------- solution of equations
    %   [fik(k) fit(k) ffi(k)] = step(fik(k),fit(k),ffi(k),mk(k), btk0(k), btk(k), etak(k),ffi(k));
     %  [uk(k) ut(k)]=dudt(dt,alk(k)/mk(k), uk(k),ut(k),alk(k)*u_(km(k))/mk(k));
     %  [wk(k) wt(k)]=dudt(dt,btk(k)/mk(k), wk(k),wt(k),btk(k)*w_(km(k))/mk(k));
-      [fik(k) fit(k)]=dudt(dt,gmk(k)/Jk(k), fik(k),fit(k),...
-       gmk(k)*(w_(km(k)+1)-w_(km(k)-1))/Jk(k)/2./dx);
+    [fik(k) fit(k)]=dudt(dt,gmk(k)/Jk(k), fik(k),fit(k),...
+     gmk(k)*(w_(km(k)+1)-w_(km(k)-1))/Jk(k)/2./dx);
 
       fprintf(f_uk(k),'%e ',uk(k)); %  mass 
       fprintf(f_wk(k),'%e ',wk(k)); %  mass 
    end
 
  %if it==1
-     u(1)=sin(om*t)*(10e-6);
+ u(1)=sin(om*t)*(10e-6);
 % end    
 %   u(1)=0.;
    for j=2:n %
@@ -127,7 +127,7 @@ for it=1:N_time  % ------- solution of equations
    c(2)=1.;
    d(2)=-1.;
 %   if it==1
-   f(1)=sin(om*t)*10e-6;
+f(1)=sin(om*t)*10e-6;
 %   end
 
    % a(1)=1.; % ------- M=0
@@ -180,9 +180,9 @@ for it=1:N_time  % ------- solution of equations
    fprintf(f_w,'%e ',w_(k_in)); %);,wk(1)
    
   % fprintf(f_w,'%e ',w_); %);,wk(1)
-   
-   
-   
+
+
+
    for j=1:n+1 %
       uu=u_(j);
       u_(j)=u(j);
@@ -191,16 +191,16 @@ for it=1:N_time  % ------- solution of equations
       
       wwx(it,j) = w_(j); % for graph w
       if abs(w_(j))>wmax      % search max amplitude for graph
-          wmax = abs(w_(j));
-      end   
-      uux(it,j) = u_(j)+(j-1)/n;
+        wmax = abs(w_(j));
+     end
+     uux(it,j) = u_(j)+(j-1)/n;
       if uux(it,j)>umax      % search max amplitude for graph
-          umax = uux(it,j);
-      end   
-      
-      w_(j)=w(j);
-      w(j)=ww;
-   end
+        umax = uux(it,j);
+     end
+
+     w_(j)=w(j);
+     w(j)=ww;
+  end
 end
 
 
@@ -210,8 +210,8 @@ fclose(f_u);
 fclose(f_t);
 
 for k=1:nm % close array of files for mass point
-    fclose(f_uk(k));
-    fclose(f_wk(k));
+  fclose(f_uk(k));
+  fclose(f_wk(k));
 end;
 
 tt=load('t.dat');
@@ -245,34 +245,44 @@ xlabel('u(x,t)');ylabel('w(x,t)');
 
 drawnow;
 
-j=2;
+delay = 0.01
+for j=2:1000:N_time
 
-for j=2:100:N_time
-    
   P.YData = wwx(j,1:n+1);
   P.XData = uux(j,1:n+1);
-  
+
   P1.XData(1) = yuk1(j)*1.e3+km(1)/n;
   P1.XData(2) = yuk2(j)*1.e3+km(2)/n;
   P1.YData(1) = wwx(j,km(1))+(wwx(j,km(1))-ywk1(j))*50;
   P1.YData(2) =  wwx(j,km(2))+(wwx(j,km(2))-ywk2(j))*50;
   title(['t=',num2str(j)]); 
-  %=wwx(j,km(1))+ywk1(j);
-  %ywk1(j)
   drawnow;
-%  ylim manual;
-%  hold on;
-  
-        % Capture the plot as an image 
-%         frame = getframe(F);
-%         im = frame2im(frame); 
-%       [imind,cm] = rgb2ind(im,256); 
-%       % Write to the GIF File 
-%       if j == 2 
-%           imwrite(imind,cm,filename,'gif', 'Loopcount',inf); 
-%       else 
-%           imwrite(imind,cm,filename,'gif','WriteMode','append'); 
-%       end 
+
+  %Capture the plot as an image
+  frame = getframe(F);
+  im = frame2im(frame);
+  [imind,cm] = rgb2ind(im,256);
+  if j == 2
+    imwrite(
+      imind,
+      cm,
+      filename,
+      'gif',
+      'Loopcount',
+      inf
+    );
+  else
+    imwrite(
+      imind,
+      cm,
+      filename,
+      'gif',
+      'WriteMode',
+      'append',
+      'DelayTime',
+      delay
+    );
+  end
 
 end
 
@@ -294,7 +304,7 @@ hold on;
 %[pf1]=plot(tt,ywk2-wwx(j,km(2)),'r');
 set(pf,'linewidth',1);
 colormap hsv;
-                   
+
 grid on;
 hold on;
 
@@ -305,40 +315,40 @@ hold on;
 %[pf1]=plot(tt,ywk2-wwx(j,km(2)),'r');
 set(pf,'linewidth',1);
 colormap hsv;
-                   
+
 grid on;
 hold on;
 
 function x=progon5(a,b,c,d,e,f,n);
-p=zeros(1,n);
-q=zeros(1,n);
-r=zeros(1,n);
-p(1)=-b(1)/c(1);
-q(1)=-a(1)/c(1);
-r(1)=f(1)/c(1);
-dl=c(2)+d(2)*p(1);
-p(2)=-(b(2)+d(2)*q(1))/dl;
-q(2)=-a(2)/dl;
-r(2)=f(2)/dl;
-for j=3:n
-   pr=d(j)+e(j)*p(j-2);
-   dl=c(j)+e(j)*q(j-2)+pr*p(j-1);
-   p(j)=-(b(j)+pr*q(j-1))/dl;
-   q(j)=-a(j)/dl;
-   r(j)=(f(j)-e(j)*r(j-2)-pr*r(j-1))/dl;
-end
-x(n)=r(n);
-x(n-1)=p(n-1)*x(n)+r(n-1);
-for j1=2:n-1
-   j=n-j1;
-   x(j)=p(j)*x(j+1)+q(j)*x(j+2)+r(j);
-end
+   p=zeros(1,n);
+   q=zeros(1,n);
+   r=zeros(1,n);
+   p(1)=-b(1)/c(1);
+   q(1)=-a(1)/c(1);
+   r(1)=f(1)/c(1);
+   dl=c(2)+d(2)*p(1);
+   p(2)=-(b(2)+d(2)*q(1))/dl;
+   q(2)=-a(2)/dl;
+   r(2)=f(2)/dl;
+   for j=3:n
+      pr=d(j)+e(j)*p(j-2);
+      dl=c(j)+e(j)*q(j-2)+pr*p(j-1);
+      p(j)=-(b(j)+pr*q(j-1))/dl;
+      q(j)=-a(j)/dl;
+      r(j)=(f(j)-e(j)*r(j-2)-pr*r(j-1))/dl;
+   end
+   x(n)=r(n);
+   x(n-1)=p(n-1)*x(n)+r(n-1);
+   for j1=2:n-1
+      j=n-j1;
+      x(j)=p(j)*x(j+1)+q(j)*x(j+2)+r(j);
+   end
 
 %-----------------------------
 function [u v]=dudt(dt,k2,u0,v0,f)
-v=(1.-k2*dt*dt/4.)*v0-k2*dt*u0+dt*f;
-v=v/(1.+k2*dt*dt/4.);
-u=u0+dt*(v+v0)/2.;
+   v=(1.-k2*dt*dt/4.)*v0-k2*dt*u0+dt*f;
+   v=v/(1.+k2*dt*dt/4.);
+   u=u0+dt*(v+v0)/2.;
 %------------------
 function [z_ v_ F_]=step(z,v,F, m , k0, k ,eta, Vt );
 %global a m k0 k eta dt Vt
